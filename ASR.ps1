@@ -1,4 +1,4 @@
-# Define the list of rule identifiers and their corresponding values
+# Set the rule identifiers and their corresponding values
 $ruleSettings = @{
     "26190899-1602-49e8-8b27-eb1d0a1ce869" = 1
     "3b576869-a4ec-4529-8536-b80a7769e899" = 1
@@ -15,16 +15,13 @@ $ruleSettings = @{
     "e6db77e5-3df2-4cf1-b95a-636979351e5b" = 1
 }
 
-# Loop through each rule identifier and configure it
+# Specify the path to the Group Policy Object
+$GPOPath = "Computer Configuration\Policies\Administrative Templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction"
+
+# Loop through each rule identifier and set the Group Policy setting
 foreach ($ruleID in $ruleSettings.Keys) {
-    $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules:$ruleID"
-    # Check if the registry key exists
-    if (-not (Test-Path $path)) {
-        # Create the registry key if it doesn't exist
-        New-Item -Path $path -Force | Out-Null
-    }
-    # Set the "Enabled" value
-    Set-ItemProperty -Path $path -Name "Enabled" -Value $ruleSettings[$ruleID] -Force
+    # Set the value for each rule identifier
+    Set-GPRegistryValue -Name $GPOPath -Key "HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules\$ruleID" -ValueName "Enabled" -Type DWORD -Value $ruleSettings[$ruleID]
 }
 
-Write-Host "Configuration completed successfully."
+Write-Host "Group Policy configuration completed successfully."
