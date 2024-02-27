@@ -15,11 +15,12 @@ $ruleIdentifiers = @(
     "e6db77e5-3df2-4cf1-b95a-636979351e5b"
 )
 
-# Set the value for each rule to 1
-$ruleIdentifiers | ForEach-Object {
-    $rulePath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Exploit Guard\ASR\Rules\$_"
-    New-Item -Path $rulePath -Force | Out-Null
-    Set-ItemProperty -Path $rulePath -Name "Enabled" -Value 1
+# Loop through each rule identifier and configure it
+foreach ($ruleID in $ruleIdentifiers) {
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules:$ruleID"
+    # Create the registry key if it doesn't exist and set the "Enabled" value to 1
+    New-Item -Path $path -Force | Out-Null
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 1 -Force
 }
 
 Write-Host "Configuration completed successfully."
