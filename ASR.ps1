@@ -17,7 +17,7 @@ $ruleSettings = @{
 
 # Loop through each rule identifier and configure it
 foreach ($ruleID in $ruleSettings.Keys) {
-    $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules\$ruleID"
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules:$ruleID"
     # Check if the registry key exists
     if (-not (Test-Path $path)) {
         # Create the registry key if it doesn't exist
